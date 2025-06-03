@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {assets} from "../assets/assets"
-import { Link, useAsyncValue, useLocation, useNavigate } from "react-router-dom";
+import { Link,  useLocation, useNavigate } from "react-router-dom";
 import { useClerk, useUser , UserButton } from "@clerk/clerk-react";
 
 const BookIcon = () =>(
@@ -61,7 +61,7 @@ const Navbar = () => {
                 { 
                 user &&   
                  <button  onClick={()=>navigate("/owner")}
-                 className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer ${isScrolled ? 'text-black' : 'text-white'} transition-all`}>
+                 className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer ${isScrolled ? 'text-black' : 'text-white'} `}>
                         Dashboard
                     </button>
                  }
@@ -81,7 +81,7 @@ const Navbar = () => {
                     )
                     :
                     (
-                    <button onClick={()=>openSignIn()} className="bg-black text-white px-8 py-2.5 rounded-full ml-4 transition-all duration-500">
+                    <button onClick={()=>openSignIn()} className="bg-black text-white px-8 py-2.5 rounded-full ml-4  group-hover:w-full  transition-all duration-500">
                         Login
                     </button>
                     )
