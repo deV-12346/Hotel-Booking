@@ -6,11 +6,13 @@ import Footer from './Components/Footer'
 import AllRooms from './Pages/AllRooms'
 import RoomDetails from './Components/RoomDetails'
 import MyBooking from './Pages/MyBooking'
+import HotelReg from './Components/HotelReg'
 const App = () => {
   const isOwner = useLocation().pathname.includes("owner")
   return (
     <div>
      {!isOwner && <Navbar/>} 
+    {false &&  <HotelReg /> }
     <div className='min-h[70vh]'>
      <Routes>
       <Route path='/' element={<Home/>} />
