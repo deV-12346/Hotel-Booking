@@ -9,7 +9,7 @@ const clearkwebhooks = async (req,res)=>{
                   "svix-timestamp": req.headers["svix-timestamp"],
                   "svix-signature": req.headers["svix-signature"]
             }
-            const payload = whook.verify(req.body.toString(), headers); 
+            const payload = whook.verify(req.body, headers); 
 const { data, type } = JSON.parse(payload);
 
             // const {data,type} = req.body
