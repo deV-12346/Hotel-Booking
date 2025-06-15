@@ -12,11 +12,12 @@ connectDb()
 
 app.use(cors())
 
-app.use("/api/clerk", express.raw({ type: "application/json" }), clearkwebhooks);
+
 //middleware
 app.use(express.json())
-app.use(clerkMiddleware())
 
+app.use(clerkMiddleware())
+app.use("/api/clerk", clearkwebhooks);
 
 
 app.get("/",(req,res)=>res.send("API is working"))
