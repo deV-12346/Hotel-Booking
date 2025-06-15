@@ -1,17 +1,18 @@
 const User = require("../Model/User")
-const {webHook} = require("svix")
+const {Webhook} = require("svix")
 
 const clearkwebhooks = async (req,res)=>{
       try {
-            const whook = new webHook(process.env.CLERK_WEBHOOKSECRET)
+            const whook = new Webhook(process.env.CLERK_WEBHOOKSECRET)
             const headers = {
-                  "svix-id": req.headers["svix-id"]
-                  "svix-timestamp": req.headers["svix-timestamp"]
+                  "svix-id": req.headers["svix-id"],
+                  "svix-timestamp": req.headers["svix-timestamp"],
                   "svix-signature": req.headers["svix-signature"]
             }
-            await whook.verify(JSON.stringify(req.body),headers)
+            const payload = whook.verify(req.body.toString(), headers); 
+const { data, type } = JSON.parse(payload);
 
-            const {data,type} = req.body
+            // const {data,type} = req.body
 
             const UserData = {
                   _id:data.id,

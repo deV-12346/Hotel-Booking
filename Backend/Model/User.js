@@ -1,4 +1,4 @@
-const {Schema,model} = reqiure("mongoose")
+const {Schema,model} = require("mongoose")
 
 const UserSchema = new Schema ({
       _id:{
@@ -24,7 +24,7 @@ const UserSchema = new Schema ({
       },
       recentSearchedCities:[{
             type:String,
-            required:true
+            default: []
       }]
 
 },{timestamp:true})
