@@ -1,6 +1,5 @@
 const express = require("express")
 const cors = require("cors")
-const bodyParser = require("body-parser");
 require("dotenv").config()
 const connectDb = require("./Config/db")
 const connectCloudinary = require("./Config/cloudinary");
@@ -19,10 +18,9 @@ app.use(cors())
 
 
 //middleware
-app.post("/api/clerk", bodyParser.raw({ type: "application/json" }), clearkwebhooks);
 app.use(express.json())
 app.use(clerkMiddleware())
-
+app.post("/api/clerk", clearkwebhooks);
 
 
 app.get("/",(req,res)=>res.send("API is working"))
