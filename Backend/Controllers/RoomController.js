@@ -17,11 +17,11 @@ const createRoom = async(req,res)=>{
      //upload images to cloudinary
      const uploadimage = req.files.map(async(file)=>{
          const response = await cloudinary.uploader.upload(file.path)
-         return response
+         return response.secure_url
      })
 
      //wait for all uploads to complete
-     const images = await Promise.all(uploadimage)
+     const imagesURL = await Promise.all(uploadimage)
 
      //save the data in DB
      await Room.create({
@@ -29,7 +29,7 @@ const createRoom = async(req,res)=>{
        roomType,
        pricePerNight: +pricePerNight,
        amenities: JSON.parse(amenities),
-       images
+       images:imagesURL
      })
      
      return res.status(200).json({

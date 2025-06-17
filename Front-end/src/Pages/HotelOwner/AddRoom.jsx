@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
 import Title from "../../Components/Titlte"
 import { assets } from '../../assets/assets'
+import { UseAppContext } from '../../Context/AppContext'
+import toast from 'react-hot-toast'
 const AddRoom = () => {
-
+  const {axios,getToken} = UseAppContext()
+  const [loading,setloading] = useState(false)
    const [images,setimages] = useState({
        1:null,
        2:null,
@@ -20,7 +23,55 @@ const AddRoom = () => {
          'Pool access': false
        }
   })
+   const handleSubmit = async (e) =>{
 
+    const formdata = new FormData
+    formdata.append("roomType",inputs.roomType)
+    formdata.append("pricePerNight",inputs.pricePerNight)
+
+    //converting amenities to arraya and keeping only enabled ameneities
+    const amenities = Object.keys(inputs.amenitites).filter((key=>inputs.amenitites[key]))
+    formdata.append("amenities",JSON.stringify(amenities))
+    //for images
+    Object.keys(images).forEach((key)=>(
+      images[key] && formdata.append("images",images[key])
+    ))
+    e.preventDefault()
+    if(!inputs.roomType || !inputs.pricePerNight || !inputs.amenitites ||
+      !Object.values(images).some(image=>image))
+      {
+        toast.error("Please fill all the details")
+        return
+      }
+    try {
+      const response = await axios.post("/api/rooms/",formdata , {headers:{
+        Authorization:`Bearer ${await getToken()}`
+      }})
+      if(response.data.success){
+        toast.success(response.data.message)
+        setloading(true)
+        setInputs({
+          roomType:"",
+       pricePerNight:0,
+       amenitites:{
+         'Free wifi' : false,
+         'Free Breakfast' : false,
+         'Room Service' : false,
+         'Mountain view' : false,
+         'Pool access': false
+       }})
+       setimages({ 1:null,
+       2:null,
+       3:null,
+       4:null
+      })
+      }
+    } catch (error) {
+       toast.error(error.response.data.message)
+    }finally{
+         setloading(false)
+    }
+   }
 
   return (
     <form action="">
@@ -74,8 +125,8 @@ const AddRoom = () => {
           </div>
         ))}
       </div>
-      <button className='bg-blue-600 text-white px-8 py-2 rounded mt-3 cursor-pointer'>
-        Add Room
+      <button onClick={handleSubmit} className='bg-blue-600 text-white px-8 py-2 rounded mt-3 cursor-pointer'>
+      { loading ? "Adding"  : "Add Room" }
       </button>
     </form>
   )

@@ -12,7 +12,7 @@ const GetuserData = async (req,res)=>{
     } catch (error) {
       return res.json({
             success:false,
-            message:err.message
+            message:error.message
       })
     }
 }

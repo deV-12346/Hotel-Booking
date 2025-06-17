@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {assets} from "../assets/assets"
-import { Link,  useLocation, useNavigate } from "react-router-dom";
-import { useClerk, useUser , UserButton } from "@clerk/clerk-react";
+import { Link,  useLocation} from "react-router-dom";
+import { useClerk, UserButton } from "@clerk/clerk-react";
+import { UseAppContext } from "../Context/AppContext";
 
 const BookIcon = () =>(
      <svg className="w-4 h-4 text-gray-700" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" >
@@ -22,8 +23,7 @@ const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const {openSignIn} = useClerk()
-    const {user} = useUser()
-    const navigate = useNavigate()
+    const {user,navigate,isOwner,showhotelReg ,SethotelReg} = UseAppContext()
     const location = useLocation()
     useEffect(() => {
      
@@ -60,9 +60,9 @@ const Navbar = () => {
                     ))}
                 { 
                 user &&   
-                 <button  onClick={()=>navigate("/owner")}
+                 <button  onClick={()=> isOwner ? navigate("/owner") : SethotelReg(true)}
                  className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer ${isScrolled ? 'text-black' : 'text-white'} `}>
-                        Dashboard
+                    { isOwner ?   "Dashboard" : "List Your Hotel"}
                     </button>
                  }
                 </div>
@@ -117,8 +117,8 @@ const Navbar = () => {
                     ))}
 
                    { user && 
-                   <button onClick={()=>navigate("/owner")} className="border px-4 py-1 text-sm font-light rounded-full cursor-pointer transition-all">
-                      Dahboard
+                   <button onClick={()=>isOwner? navigate("/owner") : SethotelReg(true) } className="border px-4 py-1 text-sm font-light rounded-full cursor-pointer transition-all">
+                        { isOwner ?   "Dashboard" : "List Your Hotel"}
                     </button>
                     }
 

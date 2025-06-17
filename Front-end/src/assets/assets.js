@@ -79,6 +79,7 @@ export const cities = [
     "Singapore",
     "New York",
     "London",
+    "India"
 ];
 
 // Exclusive Offers Dummy Data
