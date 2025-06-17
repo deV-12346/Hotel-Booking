@@ -1,6 +1,6 @@
-const Booking = require("../Model/Booking")
-const Room = require("../Model/Room")
-
+const Booking = require("../Model/Booking.js")
+const Room = require("../Model/Room.js")
+const Hotel = require("../Model/Hotel.js")
 
 // Function to check availability of room
 const CheckAvailablity = async ({room,checkInDate,checkOutDate}) =>{
@@ -103,4 +103,34 @@ const getUserBooking = async (req,res)=>{
             })
       }
 }
-module.exports = {CheckAvailablityAPI , CreateBooking  , getUserBooking}
+
+const getHotelBooking = async (req,res)=>{
+      try{
+      const hotel = await Hotel.find({owner:req.auth.userId})
+      if(!hotel){
+            return res.status(400).json({
+                  success:false,
+                  message:"Hotel not found"
+            })
+      }
+      const bookings = await Booking.find({hotel:hotel._id}).populate("room hotel user")
+      .sort({createdAt:-1})
+      // total bookings
+      let totalbooking = bookings.length
+      let totalrevenue = bookings.reduce((acc,booking)=> acc+booking.totalPrice , 0)
+      return res.status(200).json({
+            success:true,
+            message:"bookings fetched",
+            dashboardData:{
+                  totalbooking,
+                  totalrevenue
+            }
+      })
+      }catch(error){
+       return res.status(400).json({
+            success:false,
+            message:error.message
+       })
+      }
+}
+module.exports = {CheckAvailablityAPI , CreateBooking  , getUserBooking, getHotelBooking }

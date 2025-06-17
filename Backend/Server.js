@@ -8,6 +8,7 @@ const clearkwebhooks = require("./Controllers/ClerkWebhook")
 const userRouter = require("./Route/userRoutes");
 const hotelRouter = require("./Route/hotelRoutes");
 const roomRouter = require("./Route/roomRoutes");
+const bookingRouter = require("./Route/bookingRoutes");
 
 const app = express()
 
@@ -27,6 +28,7 @@ app.get("/",(req,res)=>res.send("API is working"))
 app.use("/api/user",userRouter)
 app.use("/api/hotels",hotelRouter)
 app.use("/api/rooms",roomRouter)
+app.use("/api/bookings",bookingRouter)
 
 const Port = process.env.PORT || 3000
 app.listen(Port,()=>{

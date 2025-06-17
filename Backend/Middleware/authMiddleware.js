@@ -10,6 +10,7 @@ const authMiddleware = async (req,res,next)=>{
       }
       else{
             const user = await User.findById(userId)
+            console.log(req.user)
             req.user = user
             next()
       }
