@@ -17,6 +17,7 @@ export const AppProvider = ({children})=>{
       const [isOwner,setOwner] = useState(false)
       const [showhotelReg,SethotelReg] = useState(false)
       const [searchRecentCities,setRecentCities] = useState([])
+      const [rooms,setrooms] = useState([])
       const fetchUser = async ()=>{
       try {
             const response = await axios.get("/api/user/",{headers:{Authorization 
@@ -39,10 +40,21 @@ export const AppProvider = ({children})=>{
             fetchUser()
          }
       },[user])
-
+      const fetchRooms = async ()=>{
+            try{
+               const response = await axios.get("/api/rooms/",{headers:
+                  {Authorization:`Bearer ${await getToken()}`}})
+               setrooms(response.data.rooms)
+            }catch(err){
+                  toast.error(err.response.data.message)
+            }
+      }
+      useEffect(()=>{
+          fetchRooms()
+      },[])
       const value ={
            currency,navigate,user,getToken,isOwner,setOwner,showhotelReg,SethotelReg,
-           axios,searchRecentCities,setRecentCities ,getToken ,
+           axios,searchRecentCities,setRecentCities ,getToken , rooms ,setrooms
       }
       return(
       <AppContext.Provider value={value}>

@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { assets, facilityIcons, roomCommonData, roomsDummyData } from '../assets/assets'
+import { assets, facilityIcons, roomCommonData } from '../assets/assets'
 import StarRating from './StarRating'
+import { UseAppContext } from '../Context/AppContext'
 
 const RoomDetails = () => {
+  const {rooms} = UseAppContext()
       const {id} = useParams()
       const [room,setRoom] = useState(null)
       const [mainImage,setmainImage] = useState(null)
       useEffect(()=>{
-        const room = roomsDummyData.find((room)=>room._id === id)
+        const room = rooms.find((room)=>room._id === id)
         room && setRoom(room)
         room && setmainImage(room.images[0])
       },[id])
@@ -92,7 +94,7 @@ const RoomDetails = () => {
 
       </div>
       <button type='submit' className='bg-black hover:bg-primary/dull  active:scale-95
-      transition-all text-white rounded-md max-md:w-full max-md:mt-6 md:px-25 py-3 
+      transition-all text-white rounded-md max-md:w-full max-md:mt-6 md:px-25 
       py-3 md:py-4 text-base  cursour-pointer md:ml-10'>
         Check Availability
       </button>
