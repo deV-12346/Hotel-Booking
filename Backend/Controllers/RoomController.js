@@ -72,8 +72,8 @@ const getRooms = async(req,res)=>{
 //API to get all room from specific hotel 
 const getOwnerRooms = async(req,res)=>{
       try {
-           const hotelData = await Hotel.find({owner:req.auth.userId}) 
-           const rooms = await rooms.find({hotel:hotelData._id.toString()}).populate("hotel")
+           const hotelData = await Hotel.findOne({owner:req.auth.userId}) 
+           const rooms = await Room.find({hotel:hotelData._id.toString()}).populate("hotel")
            return res.status(200).json({
             success:true,
             message:"Rooms fetched",
@@ -92,7 +92,9 @@ const toggleRoomAvailability = async(req,res)=>{
       try{
         const {roomId} = req.body
         const roomData = await Room.findById(roomId)
-        roomData.roomAvailable = !roomData.roomAvailable 
+        roomData.isAvailable = !roomData.isAvailable
+        await roomData.save()
+        
         return res.status(200).json({
             success:true,
             message:"Room Availability Updated"

@@ -113,15 +113,18 @@ const getHotelBooking = async (req,res)=>{
                   message:"Hotel not found"
             })
       }
+      console.log(hotel)
       const bookings = await Booking.find({hotel:hotel._id}).populate("room hotel user")
       .sort({createdAt:-1})
       // total bookings
       let totalbooking = bookings.length
       let totalrevenue = bookings.reduce((acc,booking)=> acc+booking.totalPrice , 0)
+      console.log(bookings,totalbooking,totalrevenue)
       return res.status(200).json({
             success:true,
             message:"bookings fetched",
             dashboardData:{
+                  bookings,
                   totalbooking,
                   totalrevenue
             }

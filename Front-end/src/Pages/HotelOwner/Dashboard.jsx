@@ -1,9 +1,32 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Titlte from '../../Components/Titlte'
-import { assets, dashboardDummyData } from '../../assets/assets'
+import { assets } from '../../assets/assets'
+import { UseAppContext } from '../../Context/AppContext'
+import toast from 'react-hot-toast'
 
 const Dashboard = () => {
-      const [dashboarddata,setDashboarddata] = useState(dashboardDummyData)
+      const {currency,axios,getToken,user} = UseAppContext()
+      const [dashboarddata,setDashboarddata] = useState({
+            bookings :[],
+            totalbooking:0,
+            totalrevenue:0
+      })
+      const fetchDashboardData = async ()=>{
+            try{
+                  const response = await axios.get("/api/bookings/hotel",{
+                        headers:{Authorization:`Bearer ${await getToken()}`}
+                  })
+                  setDashboarddata(response.data.dashboardData)
+            }catch(err)
+            {
+                  toast.error(err.response.data.message)
+            }
+      }
+      useEffect(()=>{
+          if(user){
+            fetchDashboardData()
+          }
+      },[user])
   return (
     <div>
       <Titlte  align="left" font="outfit" title="Dashboard" 
@@ -16,7 +39,7 @@ const Dashboard = () => {
                   className='h-10 max-sm:hidden'/>
                   <div className='flex flex-col sm:ml-4 font-medium'>
                         <p className='text-blue-500 text-base'>Total Booking</p>
-                        <p className='text-neutral-500 text-base'>{dashboarddata.totalBookings}</p>
+                        <p className='text-neutral-500 text-base'>{dashboarddata.totalbooking}</p>
                   </div>
             </div>
             {/* total revenue */}
@@ -25,7 +48,7 @@ const Dashboard = () => {
                   className='h-10 max-sm:hidden'/>
                   <div className='flex flex-col sm:ml-4 font-medium'>
                         <p className='text-blue-500 text-base'>Total Revenue</p>
-                        <p className='text-neutral-500 text-base'>$ {dashboarddata.totalRevenue}</p>
+                        <p className='text-neutral-500 text-base'>{currency} {dashboarddata.totalrevenue}</p>
                   </div>
             </div>
       </div> 
@@ -60,7 +83,7 @@ const Dashboard = () => {
 
                             <td className='px-4 py-3 text-gra-700 border-t border-gray-300 flex'>
                               <button className={`py-1 px-3 text-sm rounded-full mx-auto 
-                              ${item.isPaid ? "bg-green-200 text-green-600 "
+                              {currency} {item.isPaid ? "bg-green-200 text-green-600 "
                                      : 
                               " bg-amber-200 text-yellow-600"}`}>
                                     {item.isPaid ? "Completed" : "Pending"}
