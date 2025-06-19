@@ -7,7 +7,9 @@ const  Recommeneded = () => {
   const {rooms,searchRecentCities} = UseAppContext()
   const [Recommened ,setrecommed] = useState([])
   const filterhotels = ()=>{
-      const filterhotel = rooms.slice().filter((room)=>searchRecentCities.includes(room.hotel.city))
+      const filterhotel = rooms.slice().filter(
+      (room) => Array.isArray(searchRecentCities) && searchRecentCities.includes(room.hotel.city)
+      )
       setrecommed(filterhotel)
   }
   useEffect(()=>{

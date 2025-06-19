@@ -114,7 +114,7 @@ const getUserBooking = async (req,res)=>{
 
 const getHotelBooking = async (req,res)=>{
       try{
-      const hotel = await Hotel.find({owner:req.auth.userId})
+      const hotel = await Hotel.findOne({owner:req.auth.userId})
       if(!hotel){
             return res.status(400).json({
                   success:false,
@@ -124,6 +124,7 @@ const getHotelBooking = async (req,res)=>{
       console.log(hotel)
       const bookings = await Booking.find({hotel:hotel._id}).populate("room hotel user")
       .sort({createdAt:-1})
+      console.log(bookings)
       // total bookings
       let totalbooking = bookings.length
       let totalrevenue = bookings.reduce((acc,booking)=> acc+booking.totalPrice , 0)

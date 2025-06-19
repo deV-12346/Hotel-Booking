@@ -1,8 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { assets } from '../assets/assets'
+import { UseAppContext } from '../Context/AppContext'
 
 const HotelCard = ({room ,index}) => {
+      const {currency} = UseAppContext()
   return (
     <Link onClick={()=>scrollTo(0,0)} to={"/rooms/" + room._id} 
      className='relative max-w-65 w-full rounded-xl overflow-hidden bg-white text-gray-500/90
@@ -24,7 +26,7 @@ const HotelCard = ({room ,index}) => {
                   <span>{room.hotel.address}</span>
             </div>
             <div className='flex items-center justify-between'>
-                  <p className='text-xl text-gray-800'><span>${room.pricePerNight}</span>/night</p>
+                  <p className='text-xl text-gray-800'><span>{currency} {room.pricePerNight}</span>/night</p>
                   <button className='px-4 py-1.5 text-sm font-medium border border-gray-300
                   rounded hover:bg-gray-50 transition-all cursor-pointer'>Book Now</button>
             </div>

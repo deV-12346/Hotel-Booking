@@ -6,7 +6,7 @@ import { UseAppContext } from '../Context/AppContext'
 import toast from 'react-hot-toast'
 
 const RoomDetails = () => {
-  const {rooms,axios,navigate,getToken} = UseAppContext()
+  const {currency,rooms,axios,navigate,getToken} = UseAppContext()
       const {id} = useParams()
       const [room,setRoom] = useState(null)
       const [mainImage,setmainImage] = useState(null)
@@ -115,7 +115,7 @@ const RoomDetails = () => {
           }
         </div>
        </div>
-       <p className='text-2xl font-medium'>${room.pricePerNight}/Night</p>
+       <p className='text-2xl font-medium'>{currency}  {room.pricePerNight}/Night</p>
      </div>
      {/* check in check out form */}
      <form onSubmit={HandleBooking} action="" className='flex flex-col md:flex-row items-start md:items-center 
