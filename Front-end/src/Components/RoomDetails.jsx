@@ -19,7 +19,7 @@ const RoomDetails = () => {
       const [checkOutDate,setcheckOutDate] = useState(null)
       const [guests,setguests] = useState(1)
       const [isAvailable,setisAvailable] = useState(false)
-
+      const [loading,setloading] = useState(false)
       // check availability
       const checkAvaialability = async ()=>{
         try{
@@ -48,13 +48,17 @@ const RoomDetails = () => {
         await checkAvaialability()
         return
       }
-      else {const response = await axios.post("/api/bookings/book",{room:id,checkInDate,checkOutDate,
+      
+      else {
+        setloading(true)
+        const response = await axios.post("/api/bookings/book",{room:id,checkInDate,checkOutDate,
         guests,paymentMethod : "Pay At Hotel"},
         {headers:{Authorization:`Bearer ${await getToken()}`}})
       if(response.data.success){
         toast.success(response.data.message)
         navigate("/my-bookings")
         scrollTo(0,0)
+        setloading(false)
       }
     }
       }catch(err){
@@ -147,7 +151,11 @@ const RoomDetails = () => {
       <button type='submit' className='bg-black hover:bg-primary/dull  active:scale-95
       transition-all text-white rounded-md max-md:w-full max-md:mt-6 md:px-25 
       py-3 md:py-4 text-base  cursour-pointer md:ml-10'>
-      {isAvailable ? "Book Now" : "Check Availability" }
+      {
+      isAvailable
+       ?  (loading ? "Wait" : "Book Now" ) 
+        : "Check Availability"
+       }
       </button>
      </form>
      {/* common specifications  */}

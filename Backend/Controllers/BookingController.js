@@ -1,6 +1,9 @@
 const Booking = require("../Model/Booking.js")
 const Room = require("../Model/Room.js")
 const Hotel = require("../Model/Hotel.js")
+const User = require("../Model/User.js")
+const { ConfirmationMail } = require("../MailService/RoomComfirmation.js")
+const OwnerMail = require("../MailService/OwnerConfimation.js")
 
 // Function to check availability of room
 const CheckAvailablity = async ({room,checkInDate,checkOutDate}) =>{
@@ -50,6 +53,7 @@ const CreateBooking = async (req,res)=>{
       try {
             const {room,checkInDate,checkOutDate,guests} = req.body
             const user = req.user._id
+            const userData = await User.findById(user)
              //before booking check availability
             const isAvailable = await CheckAvailablity({
                   room,
@@ -71,6 +75,8 @@ const CreateBooking = async (req,res)=>{
             const nights = Math.ceil(timeDifference / (1000*3600*24))
             totalPrice *= nights
 
+            const owner = await User.findById(roomData.hotel.owner)
+
             const booking = await Booking.create({
                   user,
                   room,
@@ -80,6 +86,19 @@ const CreateBooking = async (req,res)=>{
                   checkOutDate,
                   totalPrice
             })
+            ConfirmationMail(userData.username,
+                  userData.email,roomData.hotel.name,
+                  roomData.hotel.address,
+                  checkInDate,totalPrice,
+                  booking._id)
+            OwnerMail(roomData.hotel.name,
+                  owner.email,
+                  owner.username,
+                  booking._id,
+                  roomData.roomType,
+                  checkInDate,checkOutDate,totalPrice,guests,
+                  booking.status
+            )
             return res.status(200).json({
                   success:true,
                   message:"Booking Created Successfully",
