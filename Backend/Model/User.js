@@ -19,7 +19,7 @@ const UserSchema = new Schema ({
       },
       role:{
             type:String,
-            enum:["user","HotelOwner"],
+            enum:["user","hotelOwner"],
             default:"user"
       },
       recentSearchedCities:[{

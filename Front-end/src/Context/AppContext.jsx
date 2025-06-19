@@ -6,6 +6,7 @@ axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL
 
 import { createContext, useContext, useState, useEffect } from "react";
 
+
 const AppContext = createContext()
 
 export const AppProvider = ({children})=>{
@@ -16,7 +17,7 @@ export const AppProvider = ({children})=>{
       const {getToken} = useAuth()
       const [isOwner,setOwner] = useState(false)
       const [showhotelReg,SethotelReg] = useState(false)
-      const [searchRecentCities,setRecentCities] = useState([])
+      const [searchRecentCities,setRecentCities] = useState([ ])
       const [rooms,setrooms] = useState([])
       const fetchUser = async ()=>{
       try {
@@ -24,7 +25,8 @@ export const AppProvider = ({children})=>{
             : `Bearer ${await getToken()}`}})
             if(response.data.success){
                   setOwner(response.data.role === "hotelOwner")
-                  setRecentCities(response.data.recentSearchedcities)
+                  setRecentCities(response.data.recentSearchedCities)
+                  console.log(response.data.recentSearchedCities)
             }
             else{
                   setTimeout(() => {

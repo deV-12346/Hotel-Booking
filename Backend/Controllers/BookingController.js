@@ -24,10 +24,18 @@ const CheckAvailablityAPI = async(req,res)=>{
       try{
         const {room,checkInDate,checkOutDate} = req.body
         const isAvailable = await CheckAvailablity({room,checkInDate,checkOutDate})
-        return res.status(200).json({
-            success:true,
+        if(!isAvailable){
+         return res.status(400).json({
+            success:false,
+            message:"Room is not available",
             isAvailable
         })
+      }
+        return res.status(200).json({
+            success:true,
+            message:"Room is available",
+            isAvailable
+      })
       }catch(error){
         return res.status(400).json({
             success:false,

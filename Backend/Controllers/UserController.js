@@ -1,3 +1,4 @@
+const User = require("../Model/User")
 
 // Get /api/user/
 const GetuserData = async (req,res)=>{
@@ -17,20 +18,22 @@ const GetuserData = async (req,res)=>{
     }
 }
 // /store-recent-search
-const recentSearchedCities = async(req,res)=>{
+const recentSearchCities = async(req,res)=>{
       try {
             const {recentSearchedCity} = req.body
-            const user = req.user
-            if(recentSearchedCity.length <3){
+            const user = await User.findById(req.user.id)
+            console.log(recentSearchedCity)
+            if(user.recentSearchedCities.length < 3){
                   user.recentSearchedCities.push(recentSearchedCity)
             }
             else{
                   user.recentSearchedCities.shift()
                   user.recentSearchedCities.push(recentSearchedCity)
             }
+            await user.save()
             return res.json({
                   success:true,
-                  message:"City added"
+                  message:"City added",
             })
       } catch (error) {
             return res.json({
@@ -39,4 +42,4 @@ const recentSearchedCities = async(req,res)=>{
             })
       }
 }
-module.exports = {GetuserData,recentSearchedCities}
+module.exports = {GetuserData,recentSearchCities}

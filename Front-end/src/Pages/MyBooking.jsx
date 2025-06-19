@@ -1,8 +1,26 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Title from "../Components/Titlte"
 import { assets, userBookingsDummyData } from '../assets/assets'
+import { UseAppContext } from '../Context/AppContext'
+import toast from 'react-hot-toast'
 const MyBooking = () => {
-      const [bookings,setBokking] = useState(userBookingsDummyData)
+      const [bookings,setBokking] = useState([])
+      const {user,axios,getToken} = UseAppContext()
+      const Mybookings = async()=>{
+            try{
+                  const response = await axios.get("/api/bookings/user",{
+                        headers:{Authorization :`Bearer ${await getToken()}`}
+                  })
+                  if(response.data.success){
+                        setBokking(response.data.bookings)
+                  }
+            }catch(err){
+                  toast.error(err.response.data.message)
+            }
+      }
+      useEffect(()=>{
+      Mybookings()
+      },[user])
   return (
     <div className='py-28 md:pb-35 md:pt-32 px-4 md:px-20 lg:24 xl:32'>
       <Title title="My-Bookings" subtitle="Easily manage your past, 
