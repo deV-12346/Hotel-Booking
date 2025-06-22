@@ -64,7 +64,7 @@ const RoomDetails = () => {
       }catch(err){
       setloading(false)
       console.log(err.message)
-      toast.error(err.message)
+      toast.error(err.response.data.message)
     }
   }
 
