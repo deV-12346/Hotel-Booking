@@ -108,7 +108,7 @@ const CreateBooking = async (req,res)=>{
             console.log(error.message)
             return res.status(400).json({
                   success:false,
-                  message:"Failed to create Booking"
+                  message:err.message
             })
       }
 }

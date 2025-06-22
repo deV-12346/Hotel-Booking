@@ -5,7 +5,7 @@ const authMiddleware = async (req,res,next)=>{
       if(!userId){
            return res.status(401).json({
             success:false,
-            message:"Not authenticated",
+            message:"Not authenticated Please login",
            })
       }
       else{
