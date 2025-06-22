@@ -91,7 +91,7 @@ const RoomDetails = () => {
      <div className='flex flex-col  lg:flex-row mt-6 gap-6'>
       <div className='lg:w-1/2 w-full'>
         <img src={mainImage} alt="mainimage"
-        className='w-50 md:w-full rounded-xl bg-cover shadow-lg ' />
+        className='w-full rounded-xl bg-cover shadow-lg ' />
       </div>
       <div className='grid grid-cols-2 gap-4 lg:w-1/2 w-full'>
         {room.images.length > 0 && 
